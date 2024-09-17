@@ -18,22 +18,40 @@ const data = await response.json();
 	<body>
 		<main>
 			<container-text class="margin-inline-auto">
-				<h1 class="margin-block-300" style="text-align: center;">Release history</h1>
+				<h1 class="margin-block-300" style="text-align: center;">Latest release</h1>
+				<article class="padding-block-100">
+					<h2 class="margin-block-0">{data[0].name}</h2>
+					<small>{data[0].tag_name} • {data[0].published_at}</small>
+					<p set:html={data[0].body}></p>
+					<section>
+						<h3 class="margin-bottom-0">Downloads</h3>
+						{data[0].assets.map((asset: any) => (
+							<a href={asset.browser_download_url} download>{asset.name}</a><br />
+						))}
+						<a href={data[0].tarball_url} download>Tarball</a><br />
+						<a href={data[0].zipball_url} download>Zipball</a>
+					</section>
+				</article>
+
+				<h2 class="padding-inline-50">Earlier Versions</h2>
 				<section>
-					{data.map((release: any) => (
-						<article class="margin-block-100 padding-block-100" style="border-bottom: 1px solid lightgray;">
-							<small>Prerelease • {release.prerelease}</small>
-							<h2 class="margin-block-0">{release.name}</h2>
-							<small>{release.tag_name} • {release.published_at}</small>
-							<p set:html={release.body}></p>
-							<section>
-								<h3 class="margin-bottom-0">Downloads</h3>
-								{release.assets.map((asset: any) => (
-									<a href={asset.browser_download_url} download>{asset.name}</a><br />
-								))}
-								<a href={release.tarball_url} download>Tarball</a><br />
-								<a href={release.zipball_url} download>Zipball</a>
-							</section>
+					{data.slice(1).map((release: any) => (
+						<article>
+							<details>
+								<summary>
+									<h3 class="margin-block-0">{release.name}</h3>
+									<small>{release.tag_name} • {release.published_at}</small>
+								</summary>
+								<p set:html={release.body}></p>
+								<section>
+									<h4 class="margin-bottom-0">Downloads</h4>
+									{release.assets.map((asset: any) => (
+										<a href={asset.browser_download_url} download>{asset.name}</a><br />
+									))}
+									<a href={release.tarball_url} download>Tarball</a><br />
+									<a href={release.zipball_url} download>Zipball</a>
+								</section>
+							</details>
 						</article>
 					))}
 				</section>
@@ -43,7 +61,26 @@ const data = await response.json();
 </html>
 
 <style>
+
+	h3, h4 {
+		font-size: 1rem;
+		font-weight: 500;
+	}
+
 	p {
 		white-space: pre-line;
 	}
+
+	summary {
+		padding: .5rem;
+		border-radius: .25rem;
+		list-style: none;
+		cursor: pointer;
+		transition: .2s ease;
+	}
+
+	summary:hover {
+		background-color: lightgray;
+	} 
+
 </style>
