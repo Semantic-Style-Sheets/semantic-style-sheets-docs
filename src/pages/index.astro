@@ -40,16 +40,27 @@ const data = await response.json();
 							<details>
 								<summary>
 									<h3 class="margin-block-0">{release.name}</h3>
-									<small>{release.tag_name} • {release.published_at}</small>
+									<small>{release.tag_name} • {new Date(release.published_at).toDateString()}</small>
 								</summary>
 								<p set:html={release.body}></p>
-								<section>
-									<h4 class="margin-bottom-0">Downloads</h4>
-									{release.assets.map((asset: any) => (
-										<a href={asset.browser_download_url} download>{asset.name}</a><br />
-									))}
-									<a href={release.tarball_url} download>Tarball</a><br />
-									<a href={release.zipball_url} download>Zipball</a>
+								<section class="margin-bottom-100 padding-bottom-100" style="border-bottom: 1px solid lightgray;">
+									<h4 class="margin-bottom-50">Downloads</h4>
+									<flex class="align-items-center gap-100">
+										{release.assets.map((asset: any) => (
+											<flex class="gap-25 align-items-center margin-right-25">
+												<img src="/icons/file.svg" alt="" />
+												<a href={asset.browser_download_url} download>{asset.name}</a>
+											</flex>
+										))}
+										<flex class="gap-25 align-items-center">
+											<img src="/icons/zip.svg" alt="" />
+											<a href={release.tarball_url} download>Tarball</a>
+										</flex>
+										<flex class="gap-25 align-items-center">
+											<img src="/icons/zip.svg" alt="" />
+											<a href={release.zipball_url} download>Zipball</a>
+										</flex>
+									</flex>
 								</section>
 							</details>
 						</article>
